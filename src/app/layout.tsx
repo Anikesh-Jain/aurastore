@@ -5,7 +5,12 @@ import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const appUrl =
+  (process.env.NEXT_PUBLIC_APP_URL || "").replace(/^\uFEFF/, "").trim() ||
+  "https://aurastore-nu.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: "AuraStore | Modern E-Commerce Platform",
   description: "Next-generation full-stack e-commerce marketplace powered by Next.js 15, PostgreSQL & Razorpay",
 };
