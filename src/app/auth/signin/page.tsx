@@ -52,7 +52,11 @@ function SignInForm() {
   const handleDemoFill = (demoEmail: string, demoPass: string) => {
     setEmail(demoEmail);
     setPassword(demoPass);
-    toast.info(`Filled credentials for ${demoEmail}`);
+    if (demoPass) {
+      toast.info(`Filled credentials for ${demoEmail}`);
+    } else {
+      toast.info(`Filled email for ${demoEmail}. Please enter your password.`);
+    }
   };
 
   return (
@@ -131,7 +135,7 @@ function SignInForm() {
                 variant="outline"
                 size="sm"
                 className="text-xs flex items-center justify-center gap-1.5"
-                onClick={() => handleDemoFill("admin@ecommerce.com", "AdminSecurePassword123!")}
+                onClick={() => handleDemoFill("admin@ecommerce.com", "")}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" /> Admin Demo
               </Button>
