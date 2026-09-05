@@ -29,10 +29,23 @@ function SignInForm() {
 
     setLoading(true);
     try {
+      console.log("[SignIn Debug] Form values:", {
+        email: email,
+        isPasswordNonEmpty: Boolean(password),
+        passwordLength: password ? password.length : 0,
+      });
+
       const res = await signIn("credentials", {
         redirect: false,
         email,
         password,
+      });
+
+      console.log("[SignIn Debug] signIn response:", {
+        error: res?.error,
+        status: res?.status,
+        ok: res?.ok,
+        url: res?.url,
       });
 
       if (res?.error) {

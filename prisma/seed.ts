@@ -6,9 +6,20 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting PostgreSQL database seed (Expanded 36-Product Catalog)...");
 
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@ecommerce.com";
-  const adminPassword = process.env.ADMIN_PASSWORD || "AdminSecurePassword123!";
-  const adminName = process.env.ADMIN_NAME || "Store Administrator";
+  const isInvalidPlaceholder = (val?: string) => !val || val === "[SENSITIVE]" || val.includes("[SENSITIVE]");
+
+  const rawEmail = process.env.ADMIN_EMAIL?.trim();
+  const rawPassword = process.env.ADMIN_PASSWORD?.trim();
+  const rawName = process.env.ADMIN_NAME?.trim();
+
+  const adminEmail = (!isInvalidPlaceholder(rawEmail) ? rawEmail : "admin@ecommerce.com")!;
+  const adminPassword = (!isInvalidPlaceholder(rawPassword) ? rawPassword : "AdminSecurePassword123!")!;
+  const adminName = (!isInvalidPlaceholder(rawName) ? rawName : "Store Administrator")!;
+
+  // Clean up any placeholder admin user created from earlier masked environment variables
+  await prisma.user.deleteMany({
+    where: { email: "[SENSITIVE]" },
+  });
 
   console.log(`👤 Seeding Admin User (${adminEmail})...`);
   const hashedPassword = await bcrypt.hash(adminPassword, 12);
@@ -18,6 +29,7 @@ async function main() {
     update: {
       role: Role.ADMIN,
       name: adminName,
+      password: hashedPassword,
     },
     create: {
       email: adminEmail,
