@@ -5,29 +5,14 @@ import { Footer } from "@/components/layout/Footer";
 import { ProductDetailsClient } from "@/components/product/ProductDetailsClient";
 import { prisma } from "@/lib/prisma";
 
+export const revalidate = 60; // Enable ISR edge caching (60 seconds)
+
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: ProductPageProps) {
-  const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    select: { name: true, description: true },
-  });
-
-  if (!product) return { title: "Product Not Found | AuraStore" };
-
-  return {
-    title: `${product.name} | AuraStore`,
-    description: product.description.slice(0, 160),
-  };
-}
-
-export default async function ProductDetailsPage({ params }: ProductPageProps) {
-  const { slug } = await params;
-
-  const product = await prisma.product.findUnique({
+const getProduct = React.cache(async (slug: string) => {
+  return prisma.product.findUnique({
     where: { slug, isActive: true },
     include: {
       category: { select: { name: true, slug: true } },
@@ -41,6 +26,38 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
       },
     },
   });
+});
+
+export async function generateStaticParams() {
+  try {
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      select: { slug: true },
+      take: 20,
+    });
+    return products.map((p) => ({ slug: p.slug }));
+  } catch (error) {
+    console.error("Failed to generate static params for products:", error);
+    return [];
+  }
+}
+
+export async function generateMetadata({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) return { title: "Product Not Found | AuraStore" };
+
+  return {
+    title: `${product.name} | AuraStore`,
+    description: product.description.slice(0, 160),
+  };
+}
+
+export default async function ProductDetailsPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+
+  const product = await getProduct(slug);
 
   if (!product) {
     notFound();

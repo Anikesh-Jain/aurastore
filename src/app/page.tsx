@@ -114,6 +114,7 @@ export default async function HomePage() {
                 alt="Aura Pro Wireless ANC Studio Headphones"
                 fill
                 priority
+                sizes="(max-width: 1024px) 100vw, 512px"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 text-white">

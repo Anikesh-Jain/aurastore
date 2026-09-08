@@ -5,28 +5,39 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  // Aggregate Metrics
-  const [totalProducts, totalOrders, totalCustomers, completedOrders] = await Promise.all([
+  // Execute all dashboard queries in parallel in a single concurrent batch
+  const [
+    totalProducts,
+    totalOrders,
+    totalCustomers,
+    revenueAggregate,
+    recentOrdersData,
+    lowStock,
+  ] = await Promise.all([
     prisma.product.count({ where: { isActive: true } }),
     prisma.order.count(),
     prisma.user.count({ where: { role: "CUSTOMER" } }),
-    prisma.order.findMany({
+    prisma.order.aggregate({
       where: { paymentStatus: "COMPLETED" },
-      select: { finalAmount: true },
+      _sum: { finalAmount: true },
+    }),
+    prisma.order.findMany({
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: { select: { name: true, email: true } },
+        items: { select: { id: true } },
+      },
+    }),
+    prisma.product.findMany({
+      where: { stock: { lte: 10 }, isActive: true },
+      take: 5,
+      select: { id: true, name: true, stock: true, price: true, slug: true },
+      orderBy: { stock: "asc" },
     }),
   ]);
 
-  const totalRevenue = completedOrders.reduce((sum, ord) => sum + Number(ord.finalAmount), 0);
-
-  // Recent Orders
-  const recentOrdersData = await prisma.order.findMany({
-    take: 5,
-    orderBy: { createdAt: "desc" },
-    include: {
-      user: { select: { name: true, email: true } },
-      items: { select: { id: true } },
-    },
-  });
+  const totalRevenue = Number(revenueAggregate._sum.finalAmount || 0);
 
   const recentOrders = recentOrdersData.map((o) => ({
     id: o.id,
@@ -38,14 +49,6 @@ export default async function AdminDashboardPage() {
     createdAt: o.createdAt.toISOString(),
     itemCount: o.items.length,
   }));
-
-  // Low stock products
-  const lowStock = await prisma.product.findMany({
-    where: { stock: { lte: 10 }, isActive: true },
-    take: 5,
-    select: { id: true, name: true, stock: true, price: true, slug: true },
-    orderBy: { stock: "asc" },
-  });
 
   const lowStockProducts = lowStock.map((p) => ({
     id: p.id,

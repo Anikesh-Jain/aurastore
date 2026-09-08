@@ -130,6 +130,8 @@ model Product {
 
   @@index([categoryId])
   @@index([price])
+  @@index([isActive, isFeatured])
+  @@index([isActive, createdAt])
 }
 
 model ProductImage {
@@ -157,6 +159,7 @@ model Review {
   images    ReviewImage[]
 
   @@unique([userId, productId])
+  @@index([productId])
 }
 
 model ReviewImage {
@@ -228,6 +231,10 @@ model Order {
   coupon          Coupon?     @relation(fields: [couponId], references: [id])
   items           OrderItem[]
   payment         Payment?
+
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@index([userId])
 }
 
 model OrderItem {
@@ -241,6 +248,9 @@ model OrderItem {
   subtotal     Decimal  @db.Decimal(10, 2)
   order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product      Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model Payment {

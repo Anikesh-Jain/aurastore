@@ -331,6 +331,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
               alt={currentImage.altText || product.name}
               fill
               priority
+              sizes="(max-width: 1024px) 100vw, 600px"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
             {discountPercent > 0 && (
@@ -357,7 +358,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
                       : "border-transparent opacity-70 hover:opacity-100"
                   }`}
                 >
-                  <Image src={img.url} alt="Thumbnail" fill className="object-cover" />
+                  <Image src={img.url} alt="Thumbnail" fill sizes="80px" className="object-cover" />
                 </button>
               ))}
             </div>
@@ -610,7 +611,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
                   <div className="flex gap-3 pt-2">
                     {uploadedReviewImages.map((img, idx) => (
                       <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border">
-                        <Image src={img.url} alt="Review upload" fill className="object-cover" />
+                        <Image src={img.url} alt="Review upload" fill sizes="64px" className="object-cover" />
                         <button
                           type="button"
                           onClick={() => removeReviewImage(idx)}
@@ -680,7 +681,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
                   <div className="flex gap-2 pt-2">
                     {rev.images.map((img) => (
                       <div key={img.id} className="relative w-16 h-16 rounded-lg overflow-hidden border">
-                        <Image src={img.url} alt="Review attachment" fill className="object-cover" />
+                        <Image src={img.url} alt="Review attachment" fill sizes="64px" className="object-cover" />
                       </div>
                     ))}
                   </div>
@@ -706,6 +707,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
                     src={rel.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"}
                     alt={rel.name}
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition duration-300"
                   />
                 </div>
@@ -892,7 +894,7 @@ export function ProductDetailsClient({ product, relatedProducts }: ProductDetail
                         : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <Image src={img.url} alt="Thumbnail" fill className="object-cover" />
+                    <Image src={img.url} alt="Thumbnail" fill sizes="48px" className="object-cover" />
                   </button>
                 ))}
               </div>
