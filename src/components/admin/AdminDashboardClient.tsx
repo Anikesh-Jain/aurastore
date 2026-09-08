@@ -16,15 +16,19 @@ import {
   TrendingUp,
   PackageCheck,
 } from "lucide-react";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import dynamic from "next/dynamic";
+
+const AdminRevenueChart = dynamic(
+  () => import("@/components/admin/AdminRevenueChart"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-72 w-full flex items-center justify-center bg-muted/30 rounded-lg animate-pulse">
+        <span className="text-xs text-muted-foreground">Loading chart data...</span>
+      </div>
+    ),
+  }
+);
 
 interface AdminDashboardClientProps {
   stats: {
@@ -161,33 +165,7 @@ export function AdminDashboardClient({
           <CardDescription>Monthly sales performance overview (₹ INR)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                <XAxis dataKey="month" fontSize={12} stroke="#888888" />
-                <YAxis fontSize={12} stroke="#888888" />
-                <Tooltip
-                  formatter={(value: any) => [formatPrice(Number(value)), "Revenue"]}
-                  contentStyle={{ backgroundColor: "rgba(0, 0, 0, 0.8)", borderRadius: "8px", color: "#fff" }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#2563eb"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#colorRev)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <AdminRevenueChart chartData={chartData} />
         </CardContent>
       </Card>
 

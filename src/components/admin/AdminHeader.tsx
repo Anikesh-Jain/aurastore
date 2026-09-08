@@ -5,17 +5,12 @@ import Link from "next/link";
 import { ModeToggle } from "@/components/layout/ModeToggle";
 import { Button } from "@/components/ui/button";
 import {
-  LayoutDashboard,
-  Package,
-  FolderTree,
-  ShoppingBag,
-  Ticket,
-  Users,
   Store,
   Menu,
   X,
   ShieldCheck,
 } from "lucide-react";
+import { AdminSidebarNav } from "@/components/admin/AdminSidebarNav";
 
 interface AdminHeaderProps {
   userEmail: string;
@@ -23,15 +18,6 @@ interface AdminHeaderProps {
 
 export function AdminHeader({ userEmail }: AdminHeaderProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
-  const navItems = [
-    { label: "Dashboard Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Products & Catalog", href: "/admin/products", icon: Package },
-    { label: "Categories", href: "/admin/categories", icon: FolderTree },
-    { label: "Orders & Fulfillment", href: "/admin/orders", icon: ShoppingBag },
-    { label: "Coupons & Discounts", href: "/admin/coupons", icon: Ticket },
-    { label: "Customer Directory", href: "/admin/customers", icon: Users },
-  ];
 
   return (
     <header className="border-b bg-background/95 backdrop-blur px-4 sm:px-6 sticky top-0 z-30">
@@ -73,21 +59,8 @@ export function AdminHeader({ userEmail }: AdminHeaderProps) {
 
       {/* Mobile Drawer */}
       {mobileNavOpen && (
-        <div className="md:hidden border-t py-3 space-y-1 bg-background/95">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileNavOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:bg-primary/10 hover:text-primary transition"
-              >
-                <Icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+        <div className="md:hidden border-t py-2 bg-background/95">
+          <AdminSidebarNav onItemClick={() => setMobileNavOpen(false)} />
         </div>
       )}
     </header>

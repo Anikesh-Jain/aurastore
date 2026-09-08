@@ -6,7 +6,12 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminCustomersPage() {
   const users = await prisma.user.findMany({
-    include: {
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
       orders: {
         select: { finalAmount: true },
       },

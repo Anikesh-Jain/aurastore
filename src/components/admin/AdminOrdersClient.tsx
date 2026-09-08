@@ -71,6 +71,18 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
   });
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
+    // Save previous status for rollback if needed
+    const previousOrder = orders.find((o) => o.id === orderId);
+    const previousStatus = previousOrder?.status;
+
+    // Optimistic UI update: instantly update UI
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+    );
+    if (inspectedOrder && inspectedOrder.id === orderId) {
+      setInspectedOrder({ ...inspectedOrder, status: newStatus });
+    }
+
     setUpdatingId(orderId);
     try {
       const res = await fetch(`/api/admin/orders/${orderId}/status`, {
@@ -82,18 +94,30 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
       const data = await res.json();
 
       if (!res.ok) {
+        // Rollback to previous status
+        if (previousStatus) {
+          setOrders((prev) =>
+            prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
+          );
+          if (inspectedOrder && inspectedOrder.id === orderId) {
+            setInspectedOrder({ ...inspectedOrder, status: previousStatus });
+          }
+        }
         toast.error(data.error || "Failed to update order status.");
       } else {
-        toast.success(`Order status updated to ${newStatus} & notification email dispatched via Resend!`);
-        setOrders((prev) =>
-          prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-        );
-        if (inspectedOrder && inspectedOrder.id === orderId) {
-          setInspectedOrder({ ...inspectedOrder, status: newStatus });
-        }
+        toast.success(`Order status updated to ${newStatus}`);
         router.refresh();
       }
     } catch (err) {
+      // Rollback to previous status
+      if (previousStatus) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, status: previousStatus } : o))
+        );
+        if (inspectedOrder && inspectedOrder.id === orderId) {
+          setInspectedOrder({ ...inspectedOrder, status: previousStatus });
+        }
+      }
       toast.error("Error updating order status.");
     } finally {
       setUpdatingId(null);

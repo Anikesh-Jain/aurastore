@@ -14,7 +14,14 @@ export async function GET() {
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json({ categories });
+    return NextResponse.json(
+      { categories },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        },
+      }
+    );
   } catch (error) {
     console.error("Categories GET error:", error);
     return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 });

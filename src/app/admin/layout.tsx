@@ -4,18 +4,13 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
-  LayoutDashboard,
-  Package,
-  FolderTree,
-  ShoppingBag,
-  Ticket,
-  Users,
   Store,
   ArrowUpRight,
   ShieldCheck,
 } from "lucide-react";
 import { ModeToggle } from "@/components/layout/ModeToggle";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { AdminSidebarNav } from "@/components/admin/AdminSidebarNav";
 
 export default async function AdminLayout({
   children,
@@ -27,15 +22,6 @@ export default async function AdminLayout({
   if (!session?.user || session.user.role !== "ADMIN") {
     redirect("/auth/signin?callbackUrl=/admin");
   }
-
-  const navItems = [
-    { label: "Dashboard Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Products & Catalog", href: "/admin/products", icon: Package },
-    { label: "Categories", href: "/admin/categories", icon: FolderTree },
-    { label: "Orders & Fulfillment", href: "/admin/orders", icon: ShoppingBag },
-    { label: "Coupons & Discounts", href: "/admin/coupons", icon: Ticket },
-    { label: "Customer Directory", href: "/admin/customers", icon: Users },
-  ];
 
   return (
     <div className="min-h-screen flex bg-muted/20">
@@ -56,21 +42,7 @@ export default async function AdminLayout({
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-4 space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-muted-foreground hover:bg-primary/10 hover:text-primary transition"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          <AdminSidebarNav />
         </div>
 
         {/* Sidebar Footer */}
