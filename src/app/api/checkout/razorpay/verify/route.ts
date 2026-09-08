@@ -31,76 +31,78 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid payment signature verification failed." }, { status: 400 });
     }
 
-    // Execute transactional update in PostgreSQL
-    const updatedOrder = await prisma.$transaction(async (tx) => {
-      const existingOrder = await tx.order.findUnique({
-        where: { id: orderId },
-        include: {
-          items: true,
-          shippingAddress: true,
-          coupon: true,
-          user: true,
-        },
-      });
-
-      if (!existingOrder) {
-        throw new Error("Order not found");
-      }
-
-      if (existingOrder.paymentStatus === PaymentStatus.COMPLETED) {
-        return existingOrder; // Already fulfilled (idempotent)
-      }
-
-      // 1. Update Payment Record
-      await tx.payment.updateMany({
-        where: { orderId: existingOrder.id },
-        data: {
-          status: PaymentStatus.COMPLETED,
-          razorpayPaymentId: razorpayPaymentId || `pay_mock_${Date.now()}`,
-          razorpaySignature: razorpaySignature || "mock_signature",
-        },
-      });
-
-      // 2. Decrement Stock for all purchased items
-      for (const item of existingOrder.items) {
-        await tx.product.update({
-          where: { id: item.productId },
-          data: {
-            stock: {
-              decrement: item.quantity,
-            },
-          },
-        });
-      }
-
-      // 3. Increment coupon usage if applied
-      if (existingOrder.couponId) {
-        await tx.coupon.update({
-          where: { id: existingOrder.couponId },
-          data: {
-            usedCount: {
-              increment: 1,
-            },
-          },
-        });
-      }
-
-      // 4. Update Order Status
-      const finalizedOrder = await tx.order.update({
-        where: { id: existingOrder.id },
-        data: {
-          status: OrderStatus.PROCESSING,
-          paymentStatus: PaymentStatus.COMPLETED,
-        },
-        include: {
-          items: true,
-          shippingAddress: true,
-          user: true,
-        },
-      });
-
-      return finalizedOrder;
+    // Execute update in PostgreSQL (pooled connection safe)
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: true,
+        shippingAddress: true,
+        coupon: true,
+        user: true,
+      },
     });
+
+    if (!existingOrder) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    if (existingOrder.paymentStatus === PaymentStatus.COMPLETED) {
+      return NextResponse.json({
+        success: true,
+        orderId: existingOrder.id,
+        orderNumber: existingOrder.orderNumber,
+      });
+    }
+
+    // 1. Update Payment Record
+    await prisma.payment.updateMany({
+      where: { orderId: existingOrder.id },
+      data: {
+        status: PaymentStatus.COMPLETED,
+        razorpayPaymentId: razorpayPaymentId || `pay_mock_${Date.now()}`,
+        razorpaySignature: razorpaySignature || "mock_signature",
+      },
+    });
+
+    // 2. Decrement Stock for all purchased items
+    for (const item of existingOrder.items) {
+      await prisma.product.update({
+        where: { id: item.productId },
+        data: {
+          stock: {
+            decrement: item.quantity,
+          },
+        },
+      });
+    }
+
+    // 3. Increment coupon usage if applied
+    if (existingOrder.couponId) {
+      await prisma.coupon.update({
+        where: { id: existingOrder.couponId },
+        data: {
+          usedCount: {
+            increment: 1,
+          },
+        },
+      });
+    }
+
+    // 4. Update Order Status
+    const updatedOrder = await prisma.order.update({
+      where: { id: existingOrder.id },
+      data: {
+        status: OrderStatus.PROCESSING,
+        paymentStatus: PaymentStatus.COMPLETED,
+      },
+      include: {
+        items: true,
+        shippingAddress: true,
+        user: true,
+      },
+    });
+
+
 
     // 5. Dispatch Resend Transactional Email
     try {

@@ -63,51 +63,50 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Order already processed (idempotent)" }, { status: 200 });
       }
 
-      // Execute transactional update
-      await prisma.$transaction(async (tx) => {
-        // 1. Update Payment
-        await tx.payment.update({
-          where: { id: paymentRecord.id },
-          data: {
-            status: PaymentStatus.COMPLETED,
-            razorpayPaymentId,
-            webhookReceivedAt: new Date(),
-          },
-        });
-
-        // 2. Decrement Stock
-        for (const item of order.items) {
-          await tx.product.update({
-            where: { id: item.productId },
-            data: {
-              stock: {
-                decrement: item.quantity,
-              },
-            },
-          });
-        }
-
-        // 3. Update Coupon count if applied
-        if (order.couponId) {
-          await tx.coupon.update({
-            where: { id: order.couponId },
-            data: {
-              usedCount: {
-                increment: 1,
-              },
-            },
-          });
-        }
-
-        // 4. Update Order
-        await tx.order.update({
-          where: { id: order.id },
-          data: {
-            status: OrderStatus.PROCESSING,
-            paymentStatus: PaymentStatus.COMPLETED,
-          },
-        });
+      // Execute pooled-safe updates
+      // 1. Update Payment
+      await prisma.payment.update({
+        where: { id: paymentRecord.id },
+        data: {
+          status: PaymentStatus.COMPLETED,
+          razorpayPaymentId,
+          webhookReceivedAt: new Date(),
+        },
       });
+
+      // 2. Decrement Stock
+      for (const item of order.items) {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+      }
+
+      // 3. Update Coupon count if applied
+      if (order.couponId) {
+        await prisma.coupon.update({
+          where: { id: order.couponId },
+          data: {
+            usedCount: {
+              increment: 1,
+            },
+          },
+        });
+      }
+
+      // 4. Update Order
+      await prisma.order.update({
+        where: { id: order.id },
+        data: {
+          status: OrderStatus.PROCESSING,
+          paymentStatus: PaymentStatus.COMPLETED,
+        },
+      });
+
 
       // Dispatch confirmation email
       try {

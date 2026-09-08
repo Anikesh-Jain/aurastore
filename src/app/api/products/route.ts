@@ -8,11 +8,14 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
     const search = searchParams.get("search");
-    const sort = searchParams.get("sort") || "newest";
+    const rawSort = searchParams.get("sort") || searchParams.get("sortBy") || "newest";
     const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
     const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
     const featured = searchParams.get("featured") === "true";
     const inStock = searchParams.get("inStock") === "true";
+    const limit = searchParams.get("limit") ? Math.max(1, parseInt(searchParams.get("limit")!, 10)) : undefined;
+    const page = searchParams.get("page") ? Math.max(1, parseInt(searchParams.get("page")!, 10)) : 1;
+    const skip = limit ? (page - 1) * limit : undefined;
 
     const where: any = {
       isActive: true,
@@ -46,24 +49,35 @@ export async function GET(req: Request) {
     }
 
     let orderBy: any = { createdAt: "desc" };
-    if (sort === "price-low") orderBy = { price: "asc" };
-    if (sort === "price-high") orderBy = { price: "desc" };
-    if (sort === "rating") orderBy = { ratingAvg: "desc" };
+    if (rawSort === "price-low" || rawSort === "price-asc") orderBy = { price: "asc" };
+    if (rawSort === "price-high" || rawSort === "price-desc") orderBy = { price: "desc" };
+    if (rawSort === "rating") orderBy = { ratingAvg: "desc" };
 
-    const products = await prisma.product.findMany({
-      where,
-      include: {
-        category: {
-          select: { name: true, slug: true },
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: {
+          category: {
+            select: { name: true, slug: true },
+          },
+          images: {
+            orderBy: { isPrimary: "desc" },
+          },
         },
-        images: {
-          orderBy: { isPrimary: "desc" },
-        },
-      },
-      orderBy,
+        orderBy,
+        take: limit,
+        skip,
+      }),
+      prisma.product.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      products,
+      total,
+      page,
+      totalPages: limit ? Math.ceil(total / limit) : 1,
     });
 
-    return NextResponse.json({ products });
   } catch (error) {
     console.error("Products GET error:", error);
     return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
