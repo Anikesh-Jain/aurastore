@@ -209,30 +209,41 @@ export function ProductCatalogClient({ initialProducts, categories }: ProductCat
             <div className="space-y-1.5">
               <button
                 onClick={() => handleCategorySelect("all")}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition flex items-center justify-between ${
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between ${
                   selectedCategory === "all"
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-muted text-muted-foreground"
+                    ? "bg-blue-600 text-white font-semibold shadow-sm ring-2 ring-blue-500/30 shadow-blue-500/20"
+                    : "hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <span>All Departments</span>
-                <span className="text-xs">{initialProducts.length}</span>
+                <span className={`text-xs px-2 py-0.5 rounded-full ${
+                  selectedCategory === "all"
+                    ? "bg-white/20 text-white font-bold"
+                    : "bg-muted text-muted-foreground"
+                }`}>{initialProducts.length}</span>
               </button>
 
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => handleCategorySelect(cat.slug)}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition flex items-center justify-between ${
-                    selectedCategory === cat.slug
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <span>{cat.name}</span>
-                  <span className="text-xs">{cat._count?.products ?? ""}</span>
-                </button>
-              ))}
+              {categories.map((cat) => {
+                const isActive = selectedCategory === cat.slug;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleCategorySelect(cat.slug)}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between ${
+                      isActive
+                        ? "bg-blue-600 text-white font-semibold shadow-sm ring-2 ring-blue-500/30 shadow-blue-500/20"
+                        : "hover:bg-muted/80 text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <span>{cat.name}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      isActive
+                        ? "bg-white/20 text-white font-bold"
+                        : "bg-muted text-muted-foreground"
+                    }`}>{cat._count?.products ?? ""}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 

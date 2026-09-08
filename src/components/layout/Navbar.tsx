@@ -32,8 +32,44 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
+function DesktopNavLinks() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category");
+
+  const navLinks = [
+    { name: "All Products", href: "/products", isActive: pathname === "/products" && !currentCategory },
+    { name: "Electronics", href: "/products?category=electronics", isActive: pathname === "/products" && currentCategory === "electronics" },
+    { name: "Audio", href: "/products?category=audio-wearables", isActive: pathname === "/products" && currentCategory === "audio-wearables" },
+    { name: "Fashion", href: "/products?category=fashion", isActive: pathname === "/products" && currentCategory === "fashion" },
+    { name: "Home & Living", href: "/products?category=home-living", isActive: pathname === "/products" && currentCategory === "home-living" },
+  ];
+
+  return (
+    <nav className="hidden lg:flex items-center gap-1.5 text-sm font-medium">
+      {navLinks.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+            link.isActive
+              ? "bg-blue-600 text-white shadow-sm ring-2 ring-blue-500/25"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
+          }`}
+        >
+          {link.name}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState("");
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
@@ -65,11 +101,11 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-        {/* Top Promotional Bar in AuraStore Midnight Palette */}
-        <div className="bg-[#0B1020] text-zinc-300 border-b border-blue-900/30 text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-          <span>Use code <strong className="text-sky-400 font-bold">WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm transition-colors duration-200">
+        {/* Top Promotional Bar in AuraStore Adaptive Palette */}
+        <div className="bg-blue-50/90 text-blue-950 border-b border-blue-200/70 dark:bg-[#0B1020] dark:text-zinc-300 dark:border-blue-900/30 text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 transition-colors duration-200">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+          <span>Use code <strong className="text-blue-700 dark:text-sky-400 font-bold">WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
         </div>
 
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
@@ -83,18 +119,10 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-blue-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+          {/* Desktop Nav Links with Active State */}
+          <Suspense fallback={<div className="hidden lg:flex items-center gap-2 h-8 w-80" />}>
+            <DesktopNavLinks />
+          </Suspense>
 
           {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-sm relative">
@@ -230,17 +258,28 @@ export function Navbar() {
               />
             </form>
 
-            <nav className="flex flex-col space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 rounded-md text-sm font-medium hover:bg-muted transition"
-                >
-                  {link.name}
-                </Link>
-              ))}
+            <nav className="flex flex-col space-y-1.5">
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === "/products" &&
+                  (link.href === "/products"
+                    ? typeof window !== "undefined" && !window.location.search.includes("category=")
+                    : typeof window !== "undefined" && window.location.href.includes(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
+                      isActive
+                        ? "bg-blue-600 text-white font-semibold shadow-sm"
+                        : "hover:bg-muted text-foreground"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
 
               <div className="pt-2 border-t mt-2 space-y-1">
                 {session?.user ? (

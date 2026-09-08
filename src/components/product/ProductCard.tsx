@@ -95,17 +95,34 @@ export function ProductCard({
     }
   };
 
+  const [imgSrc, setImgSrc] = useState(
+    image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80"
+  );
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80");
+    setImgError(false);
+  }, [image]);
+
   return (
     <div className="group relative rounded-2xl border border-border/60 bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1.5 hover:border-blue-500/35 flex flex-col justify-between overflow-hidden">
       {/* Product Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-muted/30">
-        <Link href={`/products/${slug}`} className="block w-full h-full">
+        <Link href={`/products/${slug}`} className="relative block w-full h-full">
           <Image
-            src={image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80"}
+            src={imgSrc}
             alt={name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+            onError={() => {
+              if (!imgError) {
+                setImgError(true);
+                setImgSrc("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80");
+              }
+            }}
+            unoptimized={imgError}
           />
         </Link>
 

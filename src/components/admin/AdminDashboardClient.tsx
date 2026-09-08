@@ -123,7 +123,7 @@ export function AdminDashboardClient({
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase">
               Active Catalog
             </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <PackageCheck className="w-4 h-4" />
             </div>
           </CardHeader>
@@ -141,7 +141,7 @@ export function AdminDashboardClient({
             <CardTitle className="text-xs font-semibold text-muted-foreground uppercase">
               Registered Users
             </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </CardHeader>

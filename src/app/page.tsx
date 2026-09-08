@@ -131,7 +131,7 @@ export default async function HomePage() {
                 return (
                   <div
                     key={idx}
-                    className="group flex items-center gap-4 p-5 rounded-2xl border border-blue-500/15 bg-white/70 dark:bg-card/60 backdrop-blur-md hover:bg-white hover:border-blue-500/35 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-1"
+                    className="group flex items-center gap-4 p-5 rounded-2xl border border-blue-500/15 bg-white/70 dark:bg-card/60 backdrop-blur-md hover:bg-white dark:hover:bg-card/90 hover:border-blue-500/35 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 group-hover:shadow-md group-hover:shadow-blue-500/30 transition-all duration-300">
                       <Icon className="w-5 h-5 transition-transform duration-300 group-hover:rotate-6" />

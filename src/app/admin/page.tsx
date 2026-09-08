@@ -24,9 +24,15 @@ export default async function AdminDashboardPage() {
     prisma.order.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
-      include: {
+      select: {
+        id: true,
+        orderNumber: true,
+        finalAmount: true,
+        status: true,
+        paymentStatus: true,
+        createdAt: true,
         user: { select: { name: true, email: true } },
-        items: { select: { id: true } },
+        _count: { select: { items: true } },
       },
     }),
     prisma.product.findMany({
@@ -47,7 +53,7 @@ export default async function AdminDashboardPage() {
     status: o.status,
     paymentStatus: o.paymentStatus,
     createdAt: o.createdAt.toISOString(),
-    itemCount: o.items.length,
+    itemCount: o._count.items,
   }));
 
   const lowStockProducts = lowStock.map((p) => ({
