@@ -66,19 +66,19 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-        {/* Top Promotional Bar */}
-        <div className="bg-primary text-primary-foreground text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Use code <strong>WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
+        {/* Top Promotional Bar in AuraStore Midnight Palette */}
+        <div className="bg-[#0B1020] text-zinc-300 border-b border-blue-900/30 text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+          <span>Use code <strong className="text-sky-400 font-bold">WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
         </div>
 
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <Link href="/" className="group flex items-center gap-2 font-bold text-xl tracking-tight shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm group-hover:scale-105 group-hover:shadow-md transition-all duration-300">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 group-hover:shadow-md group-hover:shadow-blue-500/30 transition-all duration-300">
               <ShoppingBag className="w-5 h-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
-            <span className="hidden sm:inline-block bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent font-extrabold tracking-tight">
+            <span className="hidden sm:inline-block bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 bg-clip-text text-transparent font-extrabold tracking-tight">
               AuraStore
             </span>
           </Link>
@@ -89,7 +89,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left"
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-blue-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left"
               >
                 {link.name}
               </Link>
@@ -104,7 +104,7 @@ export function Navbar() {
               placeholder="Search products, brands, gear..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 w-full rounded-full bg-muted/40 hover:bg-muted/60 focus:bg-background border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+              className="pl-9 h-10 w-full rounded-full bg-muted/40 hover:bg-muted/60 focus:bg-background border-border/50 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
             />
           </form>
 

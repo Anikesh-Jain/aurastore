@@ -96,7 +96,7 @@ export function ProductCard({
   };
 
   return (
-    <div className="group relative rounded-2xl border border-border/60 bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 hover:border-primary/30 flex flex-col justify-between overflow-hidden">
+    <div className="group relative rounded-2xl border border-border/60 bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1.5 hover:border-blue-500/35 flex flex-col justify-between overflow-hidden">
       {/* Product Image Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-muted/30">
         <Link href={`/products/${slug}`} className="block w-full h-full">
@@ -117,7 +117,7 @@ export function ProductCard({
             </span>
           )}
           {isFeatured && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide bg-amber-500 text-white shadow-sm">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide bg-blue-600 text-white shadow-sm">
               FEATURED
             </span>
           )}
@@ -132,7 +132,7 @@ export function ProductCard({
         <button
           onClick={handleToggleWishlist}
           aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-background/80 hover:bg-background backdrop-blur-md border border-border/40 flex items-center justify-center text-foreground hover:text-destructive hover:scale-110 active:scale-95 transition-all duration-200 shadow-sm z-10"
+          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 dark:bg-[#0B1020]/75 hover:bg-white dark:hover:bg-[#0B1020] backdrop-blur-md border border-white/40 dark:border-blue-400/25 hover:border-blue-400/50 flex items-center justify-center text-foreground hover:text-rose-500 hover:scale-110 active:scale-95 transition-all duration-200 shadow-sm z-10"
         >
           <Heart
             className={`w-4 h-4 transition ${
@@ -151,7 +151,7 @@ export function ProductCard({
             </p>
           )}
 
-          <Link href={`/products/${slug}`} className="block group-hover:text-primary transition-colors">
+          <Link href={`/products/${slug}`} className="block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
             <h3 className="font-semibold text-sm line-clamp-2 leading-snug">{name}</h3>
           </Link>
 
@@ -182,7 +182,7 @@ export function ProductCard({
             size="sm"
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="rounded-xl gap-1.5 px-3.5 h-9 font-semibold text-xs transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
+            className="rounded-xl gap-1.5 px-3.5 h-9 font-semibold text-xs bg-blue-600 text-white hover:bg-blue-500 transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md hover:shadow-blue-500/25"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Add</span>
