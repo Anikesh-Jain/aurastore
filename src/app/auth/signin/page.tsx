@@ -148,7 +148,7 @@ function SignInForm() {
                 variant="outline"
                 size="sm"
                 className="text-xs flex items-center justify-center gap-1.5"
-                onClick={() => handleDemoFill("admin@ecommerce.com", "")}
+                onClick={() => handleDemoFill("admin@ecommerce.com", "Major Project 1")}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" /> Admin Demo
               </Button>
