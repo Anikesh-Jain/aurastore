@@ -141,7 +141,9 @@ function SignInForm() {
           </form>
 
           <div className="mt-6 pt-6 border-t space-y-3">
-            <p className="text-xs text-muted-foreground font-medium text-center">Quick Demo Logins (Click to Autofill):</p>
+            <p className="text-xs text-muted-foreground font-medium text-center">
+              Quick Demo Logins (Admin Password: <span className="font-mono text-foreground font-semibold">Major Project 1</span>):
+            </p>
             <div className="grid grid-cols-2 gap-2">
               <Button
                 type="button"

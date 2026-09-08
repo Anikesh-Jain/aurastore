@@ -8,10 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  ShieldCheck,
-  Zap,
   Tag,
-  Sparkles,
   CheckCircle2,
   Copy,
   Check,
@@ -172,7 +169,7 @@ export function HeroCarousel() {
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
 
-  // Autoplay effect
+  // Autoplay effect (5 seconds)
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(nextSlide, 5000);
@@ -204,8 +201,6 @@ export function HeroCarousel() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const currentSlide = slides[current];
-
   return (
     <section
       aria-roledescription="carousel"
@@ -229,92 +224,102 @@ export function HeroCarousel() {
             }`}
           />
         ))}
-        {/* Subtle vignette / mesh lighting overlay */}
+        {/* Subtle lighting overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.06),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.8),transparent_70%)]" />
       </div>
 
       {/* Main Slide Content Stage */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 min-h-[560px] sm:min-h-[600px] lg:min-h-[640px] flex items-center py-12 md:py-16">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center py-12 md:py-16">
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Left Column: Typography & CTAs */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left order-2 lg:order-1">
-            
-            {/* Category Tag Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase transition-all duration-500">
-              <span className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${currentSlide.accentBadgeColor}`}>
-                {currentSlide.categoryTag}
-              </span>
-              <span className="text-zinc-400 text-xs hidden sm:inline">Collection 2026</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white">
-              {currentSlide.headline}
-            </h1>
-
-            {/* Supporting Text */}
-            <p className="text-base sm:text-lg text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              {currentSlide.supportingText}
-            </p>
-
-            {/* Special Offer Voucher Block (Slide 5 only) */}
-            {currentSlide.isOfferSlide && (
-              <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 max-w-md mx-auto lg:mx-0 flex items-center justify-between gap-3 shadow-xl">
-                <div>
-                  <div className="text-[11px] uppercase tracking-wider text-purple-300 font-semibold flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5" /> First-Time Customer Offer
-                  </div>
-                  <div className="text-lg sm:text-xl font-bold font-mono tracking-wider text-white mt-0.5">
-                    {currentSlide.couponCode}
-                  </div>
+          {/* Left Column: Typography & CTAs for all 5 slides */}
+          <div className="lg:col-span-6 relative min-h-[430px] sm:min-h-[440px] flex items-center order-2 lg:order-1">
+            {slides.map((slide, idx) => (
+              <div
+                key={slide.id}
+                className={`w-full space-y-6 text-center lg:text-left transition-all duration-700 ease-out ${
+                  idx === current
+                    ? "opacity-100 translate-y-0 relative z-10"
+                    : "opacity-0 translate-y-4 absolute inset-0 pointer-events-none z-0"
+                }`}
+              >
+                {/* Category Tag Pill */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase">
+                  <span className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${slide.accentBadgeColor}`}>
+                    {slide.categoryTag}
+                  </span>
+                  <span className="text-zinc-400 text-xs hidden sm:inline">Collection 2026</span>
                 </div>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleCopyCode(currentSlide.couponCode || "WELCOME10")}
-                  className="rounded-lg gap-1.5 font-semibold text-xs bg-white text-black hover:bg-zinc-200"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? "Copied" : "Copy Code"}</span>
-                </Button>
+
+                {/* Headline */}
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white">
+                  {slide.headline}
+                </h1>
+
+                {/* Supporting Text */}
+                <p className="text-base sm:text-lg text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                  {slide.supportingText}
+                </p>
+
+                {/* Special Offer Voucher Block (Slide 5 only) */}
+                {slide.isOfferSlide && (
+                  <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 max-w-md mx-auto lg:mx-0 flex items-center justify-between gap-3 shadow-xl">
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wider text-purple-300 font-semibold flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5" /> First-Time Customer Offer
+                      </div>
+                      <div className="text-lg sm:text-xl font-bold font-mono tracking-wider text-white mt-0.5">
+                        {slide.couponCode}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleCopyCode(slide.couponCode || "WELCOME10")}
+                      className="rounded-lg gap-1.5 font-semibold text-xs bg-white text-black hover:bg-zinc-200"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copied ? "Copied" : "Copy Code"}</span>
+                    </Button>
+                  </div>
+                )}
+
+                {/* Feature Highlights Grid */}
+                <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto lg:mx-0 pt-1 text-left">
+                  {slide.highlights.map((feat, fIdx) => (
+                    <div key={fIdx} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+                      <span className="truncate">{feat}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start pt-3">
+                  <Button
+                    size="lg"
+                    className="rounded-xl gap-2 font-semibold text-sm sm:text-base px-6 h-12 shadow-lg shadow-black/40 bg-white text-black hover:bg-zinc-100 hover:scale-[1.02] transition-all"
+                    asChild
+                  >
+                    <Link href={slide.ctaHref}>
+                      {slide.ctaText} <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="rounded-xl font-semibold text-sm sm:text-base px-6 h-12 border-white/20 text-white bg-white/5 hover:bg-white/15 hover:text-white backdrop-blur-sm"
+                    asChild
+                  >
+                    <Link href={slide.productHref}>
+                      View Product
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            )}
-
-            {/* Feature Highlights Grid */}
-            <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto lg:mx-0 pt-1 text-left">
-              {currentSlide.highlights.map((feat, fIdx) => (
-                <div key={fIdx} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-300">
-                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
-                  <span className="truncate">{feat}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start pt-3">
-              <Button
-                size="lg"
-                className="rounded-xl gap-2 font-semibold text-sm sm:text-base px-6 h-12 shadow-lg shadow-black/40 bg-white text-black hover:bg-zinc-100 hover:scale-[1.02] transition-all"
-                asChild
-              >
-                <Link href={currentSlide.ctaHref}>
-                  {currentSlide.ctaText} <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-xl font-semibold text-sm sm:text-base px-6 h-12 border-white/20 text-white bg-white/5 hover:bg-white/15 hover:text-white backdrop-blur-sm"
-                asChild
-              >
-                <Link href={currentSlide.productHref}>
-                  View Product
-                </Link>
-              </Button>
-            </div>
+            ))}
           </div>
 
           {/* Right Column: Hero Visual Product Showcase */}
@@ -325,8 +330,8 @@ export function HeroCarousel() {
                   key={slide.id}
                   className={`absolute inset-0 transition-all duration-700 ease-out ${
                     idx === current
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 translate-y-3 pointer-events-none"
+                      ? "opacity-100 scale-100 translate-y-0 z-10"
+                      : "opacity-0 scale-95 translate-y-3 pointer-events-none z-0"
                   }`}
                 >
                   <div className="relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black/40 backdrop-blur-sm group">
