@@ -74,11 +74,11 @@ export function Navbar() {
 
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-              <ShoppingBag className="w-5 h-5" />
+          <Link href="/" className="group flex items-center gap-2 font-bold text-xl tracking-tight shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm group-hover:scale-105 group-hover:shadow-md transition-all duration-300">
+              <ShoppingBag className="w-5 h-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
-            <span className="hidden sm:inline-block bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+            <span className="hidden sm:inline-block bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent font-extrabold tracking-tight">
               AuraStore
             </span>
           </Link>
@@ -89,7 +89,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:origin-left"
               >
                 {link.name}
               </Link>
@@ -98,13 +98,13 @@ export function Navbar() {
 
           {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-sm relative">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+            <Search className="w-4 h-4 absolute left-3.5 top-3 text-muted-foreground pointer-events-none" />
             <Input
               type="search"
               placeholder="Search products, brands, gear..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 w-full bg-muted/50 focus:bg-background transition"
+              className="pl-9 h-10 w-full rounded-full bg-muted/40 hover:bg-muted/60 focus:bg-background border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
             />
           </form>
 
@@ -114,10 +114,15 @@ export function Navbar() {
 
             {/* Wishlist Link */}
             <Link href="/wishlist">
-              <Button variant="ghost" size="icon" className="relative" aria-label="Wishlist">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative rounded-full hover:bg-muted/80 hover:text-primary transition-all duration-200 hover:scale-105 active:scale-95"
+                aria-label="Wishlist"
+              >
                 <Heart className="w-5 h-5" />
                 {mounted && wishlistItems.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -128,13 +133,13 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="relative"
+              className="relative rounded-full hover:bg-muted/80 hover:text-primary transition-all duration-200 hover:scale-105 active:scale-95"
               onClick={() => setCartDrawerOpen(true)}
               aria-label="Shopping Cart"
             >
               <ShoppingBag className="w-5 h-5" />
               {mounted && cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
                   {cartCount}
                 </span>
               )}

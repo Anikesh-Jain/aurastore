@@ -125,17 +125,24 @@ export default async function HomePage() {
         {/* 2. Customer Trust & Brand Values Bar */}
         <section className="border-b bg-card/60 backdrop-blur-sm py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {trustFeatures.map((feat, idx) => {
                 const Icon = feat.icon;
                 return (
-                  <div key={idx} className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5" />
+                  <div
+                    key={idx}
+                    className="group flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card/50 hover:bg-card hover:border-primary/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110 transition-all duration-300 shadow-sm">
+                      <Icon className="w-5 h-5 transition-transform duration-300 group-hover:rotate-3" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-foreground">{feat.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">{feat.description}</p>
+                      <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                        {feat.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                        {feat.description}
+                      </p>
                     </div>
                   </div>
                 );
@@ -169,38 +176,41 @@ export default async function HomePage() {
                 <Link
                   key={cat.id}
                   href={cat.href}
-                  className="group relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl border border-border/50 bg-card transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between p-6 text-white"
+                  className="group relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl border border-border/50 bg-card transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between p-6 text-white"
                 >
-                  {/* Full-Bleed Background Image */}
+                  {/* Full-Bleed Background Image with smooth micro-zoom */}
                   <Image
                     src={cat.imageSrc}
                     alt={cat.imageAlt}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   />
 
-                  {/* Multi-Stop Dark Gradient Overlay for optimal legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-300 group-hover:from-black/95" />
+                  {/* Multi-Stop Dark Gradient Overlay with subtle shift on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-500 group-hover:opacity-90" />
 
-                  {/* Top Badge */}
+                  {/* Ambient subtle glow ring on hover */}
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 group-hover:ring-white/30 transition-all duration-300 pointer-events-none" />
+
+                  {/* Top Badge with glass backdrop */}
                   <div className="relative z-10">
-                    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/15 backdrop-blur-md border border-white/20 text-white">
+                    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-sm group-hover:bg-white/25 group-hover:border-white/30 transition-all duration-300">
                       {cat.badge}
                     </span>
                   </div>
 
                   {/* Bottom Text Content & Action */}
                   <div className="relative z-10 space-y-2">
-                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-primary-foreground transition-colors">
+                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-amber-200 transition-colors duration-300">
                       {cat.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed line-clamp-2">
                       {cat.subtitle}
                     </p>
-                    <div className="pt-2 flex items-center gap-1.5 text-xs font-semibold text-white group-hover:text-amber-300 transition-colors">
+                    <div className="pt-2 flex items-center gap-1.5 text-xs font-semibold text-white group-hover:text-amber-300 transition-colors duration-300">
                       <span>{cat.ctaText}</span>
-                      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-2" />
                     </div>
                   </div>
                 </Link>
@@ -258,10 +268,11 @@ export default async function HomePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-zinc-950 via-slate-900 to-indigo-950 text-white p-8 sm:p-14 shadow-2xl border border-white/10">
               {/* Subtle ambient lighting element */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative z-10 max-w-2xl space-y-4">
-                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-purple-300">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-purple-300 shadow-sm">
                   <Tag className="w-3.5 h-3.5" /> Welcome Privilege
                 </div>
                 <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -269,7 +280,7 @@ export default async function HomePage() {
                 </h2>
                 <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
                   Join the AuraStore community today. Apply coupon code{" "}
-                  <strong className="text-amber-300 font-mono text-base px-2 py-0.5 bg-white/10 rounded border border-white/20">
+                  <strong className="text-amber-300 font-mono text-base px-2.5 py-1 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 inline-block shadow-inner">
                     WELCOME10
                   </strong>{" "}
                   at checkout for an instant 10% discount on orders of ₹999 or more.
@@ -277,7 +288,7 @@ export default async function HomePage() {
                 <div className="pt-2 flex flex-col sm:flex-row gap-3">
                   <Button
                     size="lg"
-                    className="bg-white text-black font-semibold hover:bg-zinc-100 shadow-lg rounded-xl h-12 px-6"
+                    className="bg-white text-black font-semibold hover:bg-zinc-100 hover:scale-[1.02] active:scale-[0.98] shadow-lg rounded-xl h-12 px-6 transition-all duration-200"
                     asChild
                   >
                     <Link href="/products">Explore Collections</Link>

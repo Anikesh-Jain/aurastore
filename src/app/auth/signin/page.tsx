@@ -29,23 +29,10 @@ function SignInForm() {
 
     setLoading(true);
     try {
-      console.log("[SignIn Debug] Form values:", {
-        email: email,
-        isPasswordNonEmpty: Boolean(password),
-        passwordLength: password ? password.length : 0,
-      });
-
       const res = await signIn("credentials", {
         redirect: false,
         email,
         password,
-      });
-
-      console.log("[SignIn Debug] signIn response:", {
-        error: res?.error,
-        status: res?.status,
-        ok: res?.ok,
-        url: res?.url,
       });
 
       if (res?.error) {
@@ -142,7 +129,7 @@ function SignInForm() {
 
           <div className="mt-6 pt-6 border-t space-y-3">
             <p className="text-xs text-muted-foreground font-medium text-center">
-              Quick Demo Logins (Admin Password: <span className="font-mono text-foreground font-semibold">Major Project 1</span>):
+              Quick Demo Access (Click to autofill):
             </p>
             <div className="grid grid-cols-2 gap-2">
               <Button
@@ -150,7 +137,7 @@ function SignInForm() {
                 variant="outline"
                 size="sm"
                 className="text-xs flex items-center justify-center gap-1.5"
-                onClick={() => handleDemoFill("admin@ecommerce.com", "Major Project 1")}
+                onClick={() => handleDemoFill("admin@ecommerce.com", "Major_Project_1")}
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" /> Admin Demo
               </Button>

@@ -96,35 +96,35 @@ export function ProductCard({
   };
 
   return (
-    <div className="group relative rounded-xl border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between overflow-hidden">
+    <div className="group relative rounded-2xl border border-border/60 bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 hover:border-primary/30 flex flex-col justify-between overflow-hidden">
       {/* Product Image Container */}
-      <div className="relative aspect-square w-full overflow-hidden bg-muted/40">
+      <div className="relative aspect-square w-full overflow-hidden bg-muted/30">
         <Link href={`/products/${slug}`} className="block w-full h-full">
           <Image
             src={image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80"}
             alt={name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
           />
         </Link>
 
         {/* Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {discountPercent > 0 && (
-            <Badge variant="destructive" className="font-bold text-xs shadow-sm">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-extrabold tracking-wide bg-rose-600 text-white shadow-sm backdrop-blur-sm">
               {discountPercent}% OFF
-            </Badge>
+            </span>
           )}
           {isFeatured && (
-            <Badge className="bg-amber-500 text-white font-semibold text-[10px] shadow-sm">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide bg-amber-500 text-white shadow-sm">
               FEATURED
-            </Badge>
+            </span>
           )}
           {stock <= 0 && (
-            <Badge variant="secondary" className="bg-black/70 text-white text-[10px]">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-black/80 text-white backdrop-blur-sm">
               OUT OF STOCK
-            </Badge>
+            </span>
           )}
         </div>
 
@@ -132,7 +132,7 @@ export function ProductCard({
         <button
           onClick={handleToggleWishlist}
           aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center text-foreground hover:text-destructive hover:scale-110 transition shadow-sm z-10"
+          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-background/80 hover:bg-background backdrop-blur-md border border-border/40 flex items-center justify-center text-foreground hover:text-destructive hover:scale-110 active:scale-95 transition-all duration-200 shadow-sm z-10"
         >
           <Heart
             className={`w-4 h-4 transition ${
@@ -143,7 +143,7 @@ export function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1 justify-between">
+      <div className="p-4 sm:p-5 flex flex-col flex-1 justify-between">
         <div>
           {categoryName && (
             <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">
@@ -151,7 +151,7 @@ export function ProductCard({
             </p>
           )}
 
-          <Link href={`/products/${slug}`} className="block group-hover:text-primary transition">
+          <Link href={`/products/${slug}`} className="block group-hover:text-primary transition-colors">
             <h3 className="font-semibold text-sm line-clamp-2 leading-snug">{name}</h3>
           </Link>
 
@@ -182,10 +182,10 @@ export function ProductCard({
             size="sm"
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="rounded-lg gap-1.5 px-3 h-9"
+            className="rounded-xl gap-1.5 px-3.5 h-9 font-semibold text-xs transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium">Add</span>
+            <span>Add</span>
           </Button>
         </div>
       </div>
