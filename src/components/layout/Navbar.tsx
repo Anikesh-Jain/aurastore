@@ -49,16 +49,16 @@ function DesktopNavLinks() {
   ];
 
   return (
-    <nav className="hidden lg:flex items-center gap-1.5 text-sm font-medium">
+    <nav className="hidden lg:flex items-center gap-2 text-sm font-medium">
       {navLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+          className={
             link.isActive
-              ? "bg-blue-600 text-white shadow-sm ring-2 ring-blue-500/25"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
-          }`}
+              ? "relative py-1.5 px-3.5 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-sm ring-2 ring-blue-500/25 transition-all duration-200"
+              : "relative py-1.5 px-3 text-sm font-medium text-slate-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-blue-600 after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-200 after:ease-out"
+          }
         >
           {link.name}
         </Link>
@@ -101,11 +101,11 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm transition-colors duration-200">
-        {/* Top Promotional Bar in AuraStore Adaptive Palette */}
-        <div className="bg-blue-50/90 text-blue-950 border-b border-blue-200/70 dark:bg-[#0B1020] dark:text-zinc-300 dark:border-blue-900/30 text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 transition-colors duration-200">
-          <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-          <span>Use code <strong className="text-blue-700 dark:text-sky-400 font-bold">WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
+      <header className="sticky top-0 z-40 w-full bg-white dark:bg-[#0B1020] border-b border-zinc-200 dark:border-zinc-800 shadow-sm transition-colors duration-200">
+        {/* Top Promotional Bar in Solid AuraStore Midnight Palette */}
+        <div className="bg-slate-900 text-slate-200 dark:bg-[#060913] dark:text-zinc-300 border-b border-slate-800 dark:border-blue-950/80 text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 transition-colors duration-200">
+          <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+          <span>Use code <strong className="text-sky-400 font-bold">WELCOME20</strong> for 20% off on orders over ₹2,000! &bull; Free Shipping over ₹1,999</span>
         </div>
 
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">

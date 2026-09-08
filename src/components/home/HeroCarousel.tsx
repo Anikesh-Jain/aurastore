@@ -297,11 +297,11 @@ export function HeroCarousel() {
                       </div>
                     )}
 
-                    {/* Feature Highlights Grid */}
-                    <div className="grid grid-cols-2 gap-3 max-w-md mx-auto lg:mx-0 pt-1 text-left">
+                    {/* Feature Highlights Grid with Subtle Glass Tags */}
+                    <div className="grid grid-cols-2 gap-2.5 max-w-md mx-auto lg:mx-0 pt-1 text-left">
                       {slide.highlights.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-300">
-                          <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
+                        <div key={fIdx} className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/10 text-xs sm:text-sm text-zinc-200 shadow-sm">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                           <span className="truncate font-medium">{feat}</span>
                         </div>
                       ))}
@@ -332,40 +332,43 @@ export function HeroCarousel() {
                     </div>
                   </div>
 
-                  {/* Right Column: Natural Product Presentation */}
+                  {/* Right Column: Natural Product Presentation with Frosted Glass Stage */}
                   <div className="lg:col-span-6 order-1 lg:order-2 flex items-center justify-center">
-                    <div className="relative w-full max-w-md sm:max-w-lg aspect-[4/3] sm:aspect-square flex items-center justify-center">
-                      <div className="relative w-full h-[85%] rounded-3xl overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-white/15 group">
-                        <Image
-                          src={slide.imageSrc}
-                          alt={slide.imageAlt}
-                          fill
-                          priority={idx === 0}
-                          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 480px, 540px"
-                          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.05]"
-                        />
+                    <div className="relative w-full max-w-md sm:max-w-lg aspect-[4/3] sm:aspect-square flex items-center justify-center p-2 sm:p-3">
+                      {/* Visible Frosted Glass Stage Pedestal */}
+                      <div className="relative w-full h-[90%] rounded-3xl overflow-hidden p-2.5 sm:p-3 bg-white/[0.07] backdrop-blur-2xl border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.75),inset_0_1px_0_rgba(255,255,255,0.25)] group">
+                        <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                          <Image
+                            src={slide.imageSrc}
+                            alt={slide.imageAlt}
+                            fill
+                            priority={idx === 0}
+                            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 480px, 540px"
+                            className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.05]"
+                          />
 
-                        {/* Subtle lighting edge vignette */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1020]/90 via-[#0B1020]/20 to-transparent pointer-events-none" />
+                          {/* Subtle lighting edge vignette */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1020]/90 via-[#0B1020]/20 to-transparent pointer-events-none" />
 
-                        {/* Ambient Glass Floating Badge at bottom */}
-                        <div className="absolute bottom-4 inset-x-4 p-3.5 rounded-2xl bg-[#0B1020]/60 backdrop-blur-xl border border-white/20 flex items-center justify-between gap-3 text-white transition-all duration-300 group-hover:bg-[#0B1020]/80 group-hover:border-blue-400/40 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-                          <div className="truncate">
-                            <p className="text-[10px] uppercase tracking-wider text-sky-400 font-semibold">
-                              {slide.categoryTag}
-                            </p>
-                            <h3 className="text-xs sm:text-sm font-bold truncate">
-                              {slide.productName}
-                            </h3>
-                          </div>
-                          {slide.priceFormatted && (
-                            <div className="text-right shrink-0">
-                              <span className="text-[10px] text-zinc-400 block leading-tight">Starting at</span>
-                              <span className="text-sm sm:text-base font-extrabold text-white">
-                                {slide.priceFormatted}
-                              </span>
+                          {/* Ambient Glass Floating Badge at bottom */}
+                          <div className="absolute bottom-3 inset-x-3 p-3.5 rounded-xl bg-[#0B1020]/75 backdrop-blur-xl border border-white/25 flex items-center justify-between gap-3 text-white transition-all duration-300 group-hover:bg-[#0B1020]/90 group-hover:border-blue-400/50 shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.15)]">
+                            <div className="truncate">
+                              <p className="text-[10px] uppercase tracking-wider text-sky-400 font-semibold">
+                                {slide.categoryTag}
+                              </p>
+                              <h3 className="text-xs sm:text-sm font-bold truncate">
+                                {slide.productName}
+                              </h3>
                             </div>
-                          )}
+                            {slide.priceFormatted && (
+                              <div className="text-right shrink-0">
+                                <span className="text-[10px] text-zinc-400 block leading-tight">Starting at</span>
+                                <span className="text-sm sm:text-base font-extrabold text-white">
+                                  {slide.priceFormatted}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

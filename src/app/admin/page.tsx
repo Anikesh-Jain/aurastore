@@ -1,26 +1,41 @@
 import React from "react";
 import { AdminDashboardClient } from "@/components/admin/AdminDashboardClient";
 import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
+// Consolidated KPIs cached for 15s to eliminate redundant WAN roundtrips on rapid admin navigations
+const getCachedKPIs = unstable_cache(
+  async () => {
+    const [result] = await prisma.$queryRaw<
+      Array<{
+        totalProducts: number;
+        totalOrders: number;
+        totalCustomers: number;
+        totalRevenue: number;
+      }>
+    >`
+      SELECT 
+        (SELECT COUNT(*)::int FROM "Product" WHERE "isActive" = true) as "totalProducts",
+        (SELECT COUNT(*)::int FROM "Order") as "totalOrders",
+        (SELECT COUNT(*)::int FROM "User" WHERE "role" = 'CUSTOMER') as "totalCustomers",
+        (SELECT COALESCE(SUM("finalAmount"), 0)::float FROM "Order" WHERE "paymentStatus" = 'COMPLETED') as "totalRevenue"
+    `;
+    return result || { totalProducts: 0, totalOrders: 0, totalCustomers: 0, totalRevenue: 0 };
+  },
+  ["admin-dashboard-kpis"],
+  { revalidate: 15, tags: ["admin-kpis"] }
+);
+
 export default async function AdminDashboardPage() {
-  // Execute all dashboard queries in parallel in a single concurrent batch
+  // Execute consolidated KPIs alongside recent orders and low stock in parallel
   const [
-    totalProducts,
-    totalOrders,
-    totalCustomers,
-    revenueAggregate,
+    kpiData,
     recentOrdersData,
     lowStock,
   ] = await Promise.all([
-    prisma.product.count({ where: { isActive: true } }),
-    prisma.order.count(),
-    prisma.user.count({ where: { role: "CUSTOMER" } }),
-    prisma.order.aggregate({
-      where: { paymentStatus: "COMPLETED" },
-      _sum: { finalAmount: true },
-    }),
+    getCachedKPIs(),
     prisma.order.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
@@ -43,7 +58,10 @@ export default async function AdminDashboardPage() {
     }),
   ]);
 
-  const totalRevenue = Number(revenueAggregate._sum.finalAmount || 0);
+  const totalRevenue = Number(kpiData.totalRevenue || 0);
+  const totalOrders = Number(kpiData.totalOrders || 0);
+  const totalProducts = Number(kpiData.totalProducts || 0);
+  const totalCustomers = Number(kpiData.totalCustomers || 0);
 
   const recentOrders = recentOrdersData.map((o) => ({
     id: o.id,
