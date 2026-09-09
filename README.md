@@ -22,27 +22,27 @@ A production-grade, full-stack modern e-commerce marketplace engineered with **\
 
 \- **\*\*🛍️ Complete Customer Storefront:\*\***
 
-- Dynamic Hero Spotlight, Category cards, and Deals banner.
+  - Dynamic Hero Spotlight, Category cards, and Deals banner.
 
-- Multi-faceted Product Catalog (\`/products\`) with Category filter, Price range slider, In-stock checkbox, Rating filters, and Instant Search.
+  - Multi-faceted Product Catalog (\`/products\`) with Category filter, Price range slider, In-stock checkbox, Rating filters, and Instant Search.
 
-- Product Details (\`/products/[slug]\`) with multi-image gallery, dynamic stock indicators, related products carousel, and customer reviews with photo attachments.
+  - Product Details (\`/products/[slug]\`) with multi-image gallery, dynamic stock indicators, related products carousel, and customer reviews with photo attachments.
 
-- Persistent Shopping Cart & Wishlist powered by Zustand with real-time Coupon Code validation (\`WELCOME20\`, \`MEGA500\`).
+  - Persistent Shopping Cart & Wishlist powered by Zustand with real-time Coupon Code validation (\`WELCOME20\`, \`MEGA500\`).
 
-- Interactive Multi-step Checkout & Order Status Milestone Timeline (\`/orders/[id]\`).
+  - Interactive Multi-step Checkout & Order Status Milestone Timeline (\`/orders/[id]\`).
 
 \- **\*\*📊 Comprehensive Admin Management Portal (\`/admin\`):\*\***
 
-- KPI Dashboard with live revenue calculation and Recharts visual trends.
+  - KPI Dashboard with live revenue calculation and Recharts visual trends.
 
-- Product CRUD with Cloudinary multi-image uploader & active/featured toggles.
+  - Product CRUD with Cloudinary multi-image uploader & active/featured toggles.
 
-- Category CRUD with cover imagery.
+  - Category CRUD with cover imagery.
 
-- Order Fulfillment manager with 1-click status updater triggering live customer Resend emails.
+  - Order Fulfillment manager with 1-click status updater triggering live customer Resend emails.
 
-- Coupon Code manager & Customer directory with lifetime spend tracking.
+  - Coupon Code manager & Customer directory with lifetime spend tracking.
 
 \---
 
@@ -50,59 +50,63 @@ A production-grade, full-stack modern e-commerce marketplace engineered with **\
 
 ### Storefront
 
-| Homepage                                                | Product Catalog                                             |
-| ------------------------------------------------------- | ----------------------------------------------------------- |
-| ![AuraStore Homepage](docs/screenshots/01-homepage.png) | ![Product Catalog](docs/screenshots/03-product-catalog.png) |
+| Homepage | Category Showcase |
+|---|---|
+| ![AuraStore Homepage](docs/screenshots/01-homepage.png) | ![Category Showcase](docs/screenshots/02-category-showcase.png) |
 
-### Product Experience
+| Offers & Benefits |
+|---|
+| ![Offers & Benefits](docs/screenshots/03-offers-footer.png) |
 
-| Product Details                                             | Offers & Benefits                                           |
-| ----------------------------------------------------------- | ----------------------------------------------------------- |
-| ![Product Details](docs/screenshots/04-product-details.png) | ![Offers & Benefits](docs/screenshots/02-offers-footer.png) |
+### Shopping Experience
 
-### Orders & Tracking
+| Product Catalog | Wishlist |
+|---|---|
+| ![Product Catalog](docs/screenshots/04-product-catalog.png) | ![Wishlist](docs/screenshots/05-wishlist.png) |
 
-| My Orders                                       | Order Tracking                                            |
-| ----------------------------------------------- | --------------------------------------------------------- |
-| ![My Orders](docs/screenshots/05-my-orders.png) | ![Order Tracking](docs/screenshots/06-order-tracking.png) |
+| Shopping Cart | Secure Checkout |
+|---|---|
+| ![Shopping Cart](docs/screenshots/06-shopping-cart.png) | ![Secure Checkout](docs/screenshots/07-checkout.png) |
 
-| Order & Payment Details                                         |
-| --------------------------------------------------------------- |
-| ![Order Payment Details](docs/screenshots/07-order-payment.png) |
+### Orders
+
+| Order Confirmation | Order Tracking |
+|---|---|
+| ![Order Confirmation](docs/screenshots/08-order-confirmation.png) | ![Order Tracking](docs/screenshots/09-order-tracking.png) |
 
 ### Admin Portal
 
-| Admin Dashboard                                             | Product Management                                               |
-| ----------------------------------------------------------- | ---------------------------------------------------------------- |
-| ![Admin Dashboard](docs/screenshots/08-admin-dashboard.png) | ![Admin Product Catalog](docs/screenshots/09-admin-products.png) |
+| Admin Dashboard |
+|---|
+| ![Admin Dashboard](docs/screenshots/10-admin-dashboard.png) |
 
 ---
 
 **## 🛠️ Tech Stack Overview**
 
-\| Category | Technology |
+\| Category                 | Technology                                         |
 
 \| :----------------------- | :------------------------------------------------- |
 
-\| **\*\*Framework\*\*** | Next.js 15 (App Router, React 19, TypeScript) |
+\| **\*\*Framework\*\***            | Next.js 15 (App Router, React 19, TypeScript)      |
 
-\| **\*\*Database & ORM\*\*** | PostgreSQL + Prisma ORM |
+\| **\*\*Database & ORM\*\***       | PostgreSQL + Prisma ORM                            |
 
 \| **\*\*Styling & Components\*\*** | Tailwind CSS + Shadcn UI + Radix UI + Lucide Icons |
 
-\| **\*\*Authentication\*\*** | NextAuth.js v4 (Credentials) + bcryptjs |
+\| **\*\*Authentication\*\***       | NextAuth.js v4 (Credentials) + bcryptjs            |
 
-\| **\*\*Payment Gateway\*\*** | Razorpay SDK + Cryptographic SHA-256 HMAC Webhook |
+\| **\*\*Payment Gateway\*\***      | Razorpay SDK + Cryptographic SHA-256 HMAC Webhook  |
 
-\| **\*\*Media Storage\*\*** | Cloudinary SDK |
+\| **\*\*Media Storage\*\***        | Cloudinary SDK                                     |
 
-\| **\*\*Transactional Email\*\*** | Resend SDK |
+\| **\*\*Transactional Email\*\***  | Resend SDK                                         |
 
-\| **\*\*State Management\*\*** | Zustand (with LocalStorage persistence) |
+\| **\*\*State Management\*\***     | Zustand (with LocalStorage persistence)            |
 
-\| **\*\*Charts & Analytics\*\*** | Recharts |
+\| **\*\*Charts & Analytics\*\***   | Recharts                                           |
 
-\| **\*\*Forms & Validation\*\*** | Zod + React Hook Form |
+\| **\*\*Forms & Validation\*\***   | Zod + React Hook Form                              |
 
 \---
 
@@ -114,93 +118,93 @@ ecommerce-platform/
 
 ├── prisma/
 
-│ ├── schema.prisma # PostgreSQL schema with pure relational models & ReviewImage
+│   ├── schema.prisma              # PostgreSQL schema with pure relational models & ReviewImage
 
-│ └── seed.ts # Environment-driven database seeding script
+│   └── seed.ts                    # Environment-driven database seeding script
 
 ├── src/
 
-│ ├── app/
+│   ├── app/
 
-│ │ ├── admin/ # Admin Portal (Dashboard, Products, Categories, Orders, Coupons, Customers)
+│   │   ├── admin/                 # Admin Portal (Dashboard, Products, Categories, Orders, Coupons, Customers)
 
-│ │ ├── api/ # REST Route Handlers (Auth, Upload, Checkout, Webhooks, Reviews, Coupons)
+│   │   ├── api/                   # REST Route Handlers (Auth, Upload, Checkout, Webhooks, Reviews, Coupons)
 
-│ │ ├── auth/ # Sign In & Sign Up pages with demo autofill buttons
+│   │   ├── auth/                  # Sign In & Sign Up pages with demo autofill buttons
 
-│ │ ├── cart/ # Shopping Cart page with promo code validator
+│   │   ├── cart/                  # Shopping Cart page with promo code validator
 
-│ │ ├── checkout/ # Multi-step checkout & Order success confirmation
+│   │   ├── checkout/              # Multi-step checkout & Order success confirmation
 
-│ │ ├── orders/ # Customer order history & visual milestone tracker
+│   │   ├── orders/                # Customer order history & visual milestone tracker
 
-│ │ ├── products/ # Catalog with faceted sidebar filters & Product Details
+│   │   ├── products/              # Catalog with faceted sidebar filters & Product Details
 
-│ │ ├── profile/ # Customer account profile & delivery addresses manager
+│   │   ├── profile/               # Customer account profile & delivery addresses manager
 
-│ │ ├── wishlist/ # Customer saved items wishlist
+│   │   ├── wishlist/              # Customer saved items wishlist
 
-│ │ ├── globals.css # Tailwind base & dark/light CSS variables
+│   │   ├── globals.css            # Tailwind base & dark/light CSS variables
 
-│ │ ├── layout.tsx # Root layout with Theme, Auth & Toast Providers
+│   │   ├── layout.tsx             # Root layout with Theme, Auth & Toast Providers
 
-│ │ └── page.tsx # Homepage with Hero, Categories & Featured gear
+│   │   └── page.tsx               # Homepage with Hero, Categories & Featured gear
 
-│ ├── components/
+│   ├── components/
 
-│ │ ├── admin/ # Admin dashboard, products, categories, orders, coupons clients
+│   │   ├── admin/                 # Admin dashboard, products, categories, orders, coupons clients
 
-│ │ ├── cart/ # Slide-over CartDrawer
+│   │   ├── cart/                  # Slide-over CartDrawer
 
-│ │ ├── checkout/ # CheckoutClient with Razorpay modal
+│   │   ├── checkout/              # CheckoutClient with Razorpay modal
 
-│ │ ├── layout/ # Navbar, Footer, ModeToggle
+│   │   ├── layout/                # Navbar, Footer, ModeToggle
 
-│ │ ├── product/ # ProductCard, ProductCatalogClient, ProductDetailsClient
+│   │   ├── product/               # ProductCard, ProductCatalogClient, ProductDetailsClient
 
-│ │ ├── profile/ # ProfileClient
+│   │   ├── profile/               # ProfileClient
 
-│ │ ├── ui/ # Shadcn UI primitives (Button, Card, Input, Dialog, etc.)
+│   │   ├── ui/                    # Shadcn UI primitives (Button, Card, Input, Dialog, etc.)
 
-│ │ └── providers.tsx # Client-side Theme, Session & Toast wrapper
+│   │   └── providers.tsx          # Client-side Theme, Session & Toast wrapper
 
-│ ├── lib/
+│   ├── lib/
 
-│ │ ├── auth.ts # NextAuth options & JWT RBAC callbacks
+│   │   ├── auth.ts                # NextAuth options & JWT RBAC callbacks
 
-│ │ ├── cloudinary.ts # Cloudinary upload & delete helpers
+│   │   ├── cloudinary.ts          # Cloudinary upload & delete helpers
 
-│ │ ├── prisma.ts # Singleton Prisma client instance
+│   │   ├── prisma.ts              # Singleton Prisma client instance
 
-│ │ ├── razorpay.ts # Razorpay client & HMAC signature verifier
+│   │   ├── razorpay.ts            # Razorpay client & HMAC signature verifier
 
-│ │ ├── resend.ts # Resend email templates & dispatchers
+│   │   ├── resend.ts              # Resend email templates & dispatchers
 
-│ │ └── utils.ts # Price formatting (₹ INR), discount calculation, cn helper
+│   │   └── utils.ts               # Price formatting (₹ INR), discount calculation, cn helper
 
-│ ├── stores/
+│   ├── stores/
 
-│ │ ├── cartStore.ts # Zustand Cart store with persistence
+│   │   ├── cartStore.ts           # Zustand Cart store with persistence
 
-│ │ └── wishlistStore.ts # Zustand Wishlist store with persistence
+│   │   └── wishlistStore.ts       # Zustand Wishlist store with persistence
 
-│ ├── types/
+│   ├── types/
 
-│ │ └── next-auth.d.ts # TypeScript module augmentations for custom roles
+│   │   └── next-auth.d.ts         # TypeScript module augmentations for custom roles
 
-│ └── middleware.ts # Next.js Route protection & Admin RBAC guard
+│   └── middleware.ts              # Next.js Route protection & Admin RBAC guard
 
-├── .env.example # Clean environment configuration template
+├── .env.example                   # Clean environment configuration template
 
-├── components.json # Shadcn UI configuration
+├── components.json                # Shadcn UI configuration
 
-├── next.config.ts # Next.js config with remote image domains
+├── next.config.ts                 # Next.js config with remote image domains
 
-├── package.json # Dependencies and npm scripts
+├── package.json                   # Dependencies and npm scripts
 
-├── tailwind.config.ts # Tailwind CSS theme extension
+├── tailwind.config.ts             # Tailwind CSS theme extension
 
-└── tsconfig.json # TypeScript compiler options and @/\* aliases
+└── tsconfig.json                  # TypeScript compiler options and @/\* aliases
 
 \`\`\`
 
@@ -312,13 +316,13 @@ Open [http\://localhost:3000]\(http\://localhost:3000) in your browser.
 
 Both accounts can be autofilled with 1-click on the \`/auth/signin\` page:
 
-\| Role | Email | Password | Access Rights |
+\| Role            | Email                    | Password                  | Access Rights                                                                          |
 
 \| :-------------- | :----------------------- | :------------------------ | :------------------------------------------------------------------------------------- |
 
-\| **\*\*Store Admin\*\*** | \`admin\@ecommerce.com\` | \`AdminSecurePassword123!\` | Full access to \`/admin\` dashboard, product/category/order CRUD, and customer analytics |
+\| **\*\*Store Admin\*\*** | \`admin\@ecommerce.com\`    | \`AdminSecurePassword123!\` | Full access to \`/admin\` dashboard, product/category/order CRUD, and customer analytics |
 
-\| **\*\*Customer\*\*** | \`customer\@ecommerce.com\` | \`Customer123!\` | Standard shopping, cart, wishlist, checkout, orders tracking, and review writing |
+\| **\*\*Customer\*\***    | \`customer\@ecommerce.com\` | \`Customer123!\`            | Standard shopping, cart, wishlist, checkout, orders tracking, and review writing       |
 
 \---
 
