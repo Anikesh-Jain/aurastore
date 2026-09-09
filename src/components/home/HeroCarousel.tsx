@@ -15,6 +15,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 interface SlideData {
   id: string;
@@ -179,12 +180,20 @@ const slides: SlideData[] = [
 ];
 
 export function HeroCarousel() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme === "dark" : false;
 
   const nextSlide = useCallback(() => {
     setCurrent((prev) => (prev + 1) % slides.length);
@@ -248,7 +257,17 @@ export function HeroCarousel() {
     <section
       aria-roledescription="carousel"
       aria-label="Featured Collections"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100/80 dark:bg-[#0B1020] text-slate-900 dark:text-white select-none border-b border-slate-200/80 dark:border-blue-900/30 transition-colors duration-300"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100/80 dark:bg-none dark:from-[#0B1020] dark:via-[#0B1020] dark:to-[#0B1020] dark:bg-[#0B1020] text-slate-900 dark:text-white select-none border-b border-slate-200/90 dark:border-blue-900/30 transition-colors duration-300"
+      style={
+        mounted
+          ? {
+              backgroundColor: isDark ? "#0B1020" : "#ffffff",
+              backgroundImage: isDark
+                ? "none"
+                : "linear-gradient(to bottom, #f8fafc 0%, #ffffff 50%, rgba(241, 245, 249, 0.8) 100%)",
+            }
+          : undefined
+      }
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -293,33 +312,68 @@ export function HeroCarousel() {
                   {/* Left Column: Typography & CTAs */}
                   <div className="lg:col-span-6 space-y-5 sm:space-y-6 text-center lg:text-left order-2 lg:order-1">
                     {/* Category Tag Pill */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-slate-200/90 dark:border-white/20 bg-white/90 dark:bg-white/[0.08] backdrop-blur-md text-xs font-semibold tracking-wide uppercase shadow-sm">
+                    <div
+                      style={
+                        mounted
+                          ? {
+                              backgroundColor: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.92)",
+                              borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(226, 232, 240, 0.9)",
+                            }
+                          : undefined
+                      }
+                      className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-slate-200/90 dark:border-white/20 bg-white/90 dark:bg-white/[0.08] backdrop-blur-md text-xs font-semibold tracking-wide uppercase shadow-sm"
+                    >
                       <span className={`px-2 py-0.5 rounded-md border text-[11px] font-bold ${slide.badgeClass}`}>
                         {slide.categoryTag}
                       </span>
-                      <span className="text-slate-600 dark:text-zinc-400 text-xs hidden sm:inline font-medium">
+                      <span
+                        style={mounted ? { color: isDark ? "#A1A1AA" : "#475569" } : undefined}
+                        className="text-slate-600 dark:text-zinc-400 text-xs hidden sm:inline font-medium"
+                      >
                         Verified Collection
                       </span>
                     </div>
 
                     {/* Headline */}
-                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-slate-950 dark:text-white">
+                    <h1
+                      style={mounted ? { color: isDark ? "#FFFFFF" : "#0F172A" } : undefined}
+                      className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-slate-950 dark:text-white"
+                    >
                       {slide.headline}
                     </h1>
 
                     {/* Supporting Text */}
-                    <p className="text-base sm:text-lg text-slate-700 dark:text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                    <p
+                      style={mounted ? { color: isDark ? "#CBD5E1" : "#334155" } : undefined}
+                      className="text-base sm:text-lg text-slate-700 dark:text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal"
+                    >
                       {slide.supportingText}
                     </p>
 
                     {/* Special Offer Voucher Block (Slide 5 only) */}
                     {slide.isOfferSlide && (
-                      <div className="p-4 rounded-2xl bg-white/95 dark:bg-white/[0.08] backdrop-blur-xl border border-emerald-300 dark:border-emerald-500/30 max-w-md mx-auto lg:mx-0 flex items-center justify-between gap-3 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                      <div
+                        style={
+                          mounted
+                            ? {
+                                backgroundColor: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.95)",
+                                borderColor: isDark ? "rgba(16, 185, 129, 0.3)" : "#6EE7B7",
+                              }
+                            : undefined
+                        }
+                        className="p-4 rounded-2xl bg-white/95 dark:bg-white/[0.08] backdrop-blur-xl border border-emerald-300 dark:border-emerald-500/30 max-w-md mx-auto lg:mx-0 flex items-center justify-between gap-3 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                      >
                         <div>
-                          <div className="text-[11px] uppercase tracking-wider text-emerald-800 dark:text-emerald-400 font-bold flex items-center gap-1.5">
+                          <div
+                            style={mounted ? { color: isDark ? "#34D399" : "#065F46" } : undefined}
+                            className="text-[11px] uppercase tracking-wider text-emerald-800 dark:text-emerald-400 font-bold flex items-center gap-1.5"
+                          >
                             <Tag className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> First-Time Customer Offer
                           </div>
-                          <div className="text-lg sm:text-xl font-bold font-mono tracking-wider text-slate-950 dark:text-white mt-0.5">
+                          <div
+                            style={mounted ? { color: isDark ? "#FFFFFF" : "#0F172A" } : undefined}
+                            className="text-lg sm:text-xl font-bold font-mono tracking-wider text-slate-950 dark:text-white mt-0.5"
+                          >
                             {slide.couponCode}
                           </div>
                         </div>
@@ -341,6 +395,15 @@ export function HeroCarousel() {
                       {slide.highlights.map((feat, fIdx) => (
                         <div
                           key={fIdx}
+                          style={
+                            mounted
+                              ? {
+                                  color: isDark ? "#E2E8F0" : "#1E293B",
+                                  backgroundColor: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.92)",
+                                  borderColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(226, 232, 240, 0.9)",
+                                }
+                              : undefined
+                          }
                           className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-white/[0.05] backdrop-blur-md border border-slate-200/90 dark:border-white/10 text-xs sm:text-sm text-slate-800 dark:text-zinc-200 shadow-sm"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -364,6 +427,15 @@ export function HeroCarousel() {
                       <Button
                         size="lg"
                         variant="outline"
+                        style={
+                          mounted
+                            ? {
+                                color: isDark ? "#FFFFFF" : "#0F172A",
+                                backgroundColor: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.92)",
+                                borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "#CBD5E1",
+                              }
+                            : undefined
+                        }
                         className="rounded-xl font-semibold text-sm sm:text-base px-6 h-12 border-slate-300 dark:border-white/20 text-slate-900 dark:text-white bg-white/90 dark:bg-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.16] hover:text-blue-600 dark:hover:text-white backdrop-blur-md hover:scale-[1.02] active:scale-95 transition-all duration-200 shadow-sm"
                         asChild
                       >
@@ -382,7 +454,17 @@ export function HeroCarousel() {
                       className="group/stage relative w-full max-w-md sm:max-w-lg aspect-[4/3] sm:aspect-square flex items-center justify-center p-2 sm:p-3 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-3xl"
                     >
                       {/* Premium Frosted Glass Pedestal */}
-                      <div className="relative w-full h-[92%] rounded-3xl overflow-hidden p-2.5 sm:p-3 bg-white/80 dark:bg-white/[0.07] backdrop-blur-2xl border border-slate-200/90 dark:border-white/20 shadow-[0_20px_50px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.75),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-500 group-hover/stage:shadow-[0_24px_60px_rgba(37,99,235,0.15)] dark:group-hover/stage:shadow-[0_25px_70px_rgba(37,99,235,0.25)] group-hover/stage:border-blue-400/40">
+                      <div
+                        style={
+                          mounted
+                            ? {
+                                backgroundColor: isDark ? "rgba(255, 255, 255, 0.07)" : "rgba(255, 255, 255, 0.85)",
+                                borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(226, 232, 240, 0.9)",
+                              }
+                            : undefined
+                        }
+                        className="relative w-full h-[92%] rounded-3xl overflow-hidden p-2.5 sm:p-3 bg-white/80 dark:bg-white/[0.07] backdrop-blur-2xl border border-slate-200/90 dark:border-white/20 shadow-[0_20px_50px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.75),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-500 group-hover/stage:shadow-[0_24px_60px_rgba(37,99,235,0.15)] dark:group-hover/stage:shadow-[0_25px_70px_rgba(37,99,235,0.25)] group-hover/stage:border-blue-400/40"
+                      >
                         <div className="relative w-full h-full rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900/50">
                           <Image
                             src={slide.imageSrc}
@@ -397,27 +479,52 @@ export function HeroCarousel() {
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent dark:from-[#0B1020]/90 dark:via-[#0B1020]/20 pointer-events-none" />
 
                           {/* Ambient Glass Floating Product Badge inside the card */}
-                          <div className="absolute bottom-3 inset-x-3 p-3 sm:p-3.5 rounded-xl bg-white/95 dark:bg-[#0B1020]/90 backdrop-blur-xl border border-slate-200 dark:border-white/20 flex items-center justify-between gap-3 text-slate-950 dark:text-white transition-all duration-300 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] group-hover/stage:border-blue-500/40">
+                          <div
+                            style={
+                              mounted
+                                ? {
+                                    backgroundColor: isDark ? "rgba(11, 16, 32, 0.92)" : "rgba(255, 255, 255, 0.97)",
+                                    borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(226, 232, 240, 0.9)",
+                                  }
+                                : undefined
+                            }
+                            className="absolute bottom-3 inset-x-3 p-3 sm:p-3.5 rounded-xl bg-white/95 dark:bg-[#0B1020]/90 backdrop-blur-xl border border-slate-200 dark:border-white/20 flex items-center justify-between gap-3 text-slate-950 dark:text-white transition-all duration-300 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] group-hover/stage:border-blue-500/40"
+                          >
                             <div className="truncate">
-                              <p className="text-[10px] uppercase tracking-wider text-blue-700 dark:text-sky-400 font-bold">
+                              <p
+                                style={mounted ? { color: isDark ? "#38BDF8" : "#1D4ED8" } : undefined}
+                                className="text-[10px] uppercase tracking-wider text-blue-700 dark:text-sky-400 font-bold"
+                              >
                                 {slide.categoryTag}
                               </p>
-                              <h3 className="text-xs sm:text-sm font-bold truncate text-slate-950 dark:text-white">
+                              <h3
+                                style={mounted ? { color: isDark ? "#FFFFFF" : "#0F172A" } : undefined}
+                                className="text-xs sm:text-sm font-bold truncate text-slate-950 dark:text-white"
+                              >
                                 {slide.productName}
                               </h3>
                             </div>
                             <div className="text-right shrink-0">
                               <div className="flex items-baseline gap-1.5 justify-end">
                                 {slide.originalPriceFormatted && (
-                                  <span className="text-[11px] text-slate-500 dark:text-zinc-400 line-through">
+                                  <span
+                                    style={mounted ? { color: isDark ? "#94A3B8" : "#64748B" } : undefined}
+                                    className="text-[11px] text-slate-500 dark:text-zinc-400 line-through"
+                                  >
                                     {slide.originalPriceFormatted}
                                   </span>
                                 )}
-                                <span className="text-sm sm:text-base font-extrabold text-blue-700 dark:text-white">
+                                <span
+                                  style={mounted ? { color: isDark ? "#FFFFFF" : "#1D4ED8" } : undefined}
+                                  className="text-sm sm:text-base font-extrabold text-blue-700 dark:text-white"
+                                >
                                   {slide.priceFormatted}
                                 </span>
                               </div>
-                              <span className="text-[10px] text-slate-600 dark:text-zinc-300 inline-flex items-center gap-0.5 justify-end font-medium">
+                              <span
+                                style={mounted ? { color: isDark ? "#CBD5E1" : "#475569" } : undefined}
+                                className="text-[10px] text-slate-600 dark:text-zinc-300 inline-flex items-center gap-0.5 justify-end font-medium"
+                              >
                                 View product <ExternalLink className="w-2.5 h-2.5 ml-0.5" />
                               </span>
                             </div>
@@ -443,6 +550,15 @@ export function HeroCarousel() {
           prevSlide();
         }}
         aria-label="Previous slide"
+        style={
+          mounted
+            ? {
+                backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.95)",
+                borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "#CBD5E1",
+                color: isDark ? "#FFFFFF" : "#0F172A",
+              }
+            : undefined
+        }
         className="hidden sm:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full items-center justify-center bg-white/90 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.18] backdrop-blur-xl text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 border border-slate-300/90 dark:border-white/20 hover:border-blue-400/50 transition-all duration-300 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:scale-110 active:scale-95 cursor-pointer"
       >
         <ChevronLeft className="w-5 h-5" />
@@ -456,6 +572,15 @@ export function HeroCarousel() {
           nextSlide();
         }}
         aria-label="Next slide"
+        style={
+          mounted
+            ? {
+                backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.95)",
+                borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "#CBD5E1",
+                color: isDark ? "#FFFFFF" : "#0F172A",
+              }
+            : undefined
+        }
         className="hidden sm:flex absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full items-center justify-center bg-white/90 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.18] backdrop-blur-xl text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 border border-slate-300/90 dark:border-white/20 hover:border-blue-400/50 transition-all duration-300 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:scale-110 active:scale-95 cursor-pointer"
       >
         <ChevronRight className="w-5 h-5" />
@@ -463,7 +588,17 @@ export function HeroCarousel() {
 
       {/* Frosted Glass Pagination Pill */}
       <div className="absolute bottom-4 sm:bottom-6 inset-x-0 z-20 flex items-center justify-center pointer-events-none">
-        <div className="bg-white/90 dark:bg-[#0B1020]/80 backdrop-blur-xl border border-slate-300/90 dark:border-white/20 rounded-full px-3.5 py-1.5 flex items-center gap-2.5 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] pointer-events-auto">
+        <div
+          style={
+            mounted
+              ? {
+                  backgroundColor: isDark ? "rgba(11, 16, 32, 0.85)" : "rgba(255, 255, 255, 0.95)",
+                  borderColor: isDark ? "rgba(255, 255, 255, 0.2)" : "#CBD5E1",
+                }
+              : undefined
+          }
+          className="bg-white/90 dark:bg-[#0B1020]/80 backdrop-blur-xl border border-slate-300/90 dark:border-white/20 rounded-full px-3.5 py-1.5 flex items-center gap-2.5 shadow-md dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] pointer-events-auto"
+        >
           {slides.map((s, idx) => (
             <button
               key={s.id}
@@ -474,6 +609,20 @@ export function HeroCarousel() {
                 goToSlide(idx);
               }}
               aria-label={`Go to slide ${idx + 1}: ${s.categoryTag}`}
+              style={
+                mounted
+                  ? {
+                      backgroundColor:
+                        idx === current
+                          ? isDark
+                            ? "#3B82F6"
+                            : "#2563EB"
+                          : isDark
+                          ? "rgba(255, 255, 255, 0.3)"
+                          : "#94A3B8",
+                    }
+                  : undefined
+              }
               className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
                 idx === current
                   ? "w-8 bg-blue-600 dark:bg-blue-500 shadow-[0_0_12px_rgba(37,99,235,0.7)]"
